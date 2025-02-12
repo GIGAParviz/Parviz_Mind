@@ -1,14 +1,10 @@
-### **README.md**
-
----
-
 # **ParvizMind**  
 **An Advanced AI with Multi-Step Reasoning and Document Management**
 
 ---
 
 ## **📌 Project Overview**  
-**ParvizGPT Pro** is an intelligent chatbot developed using Large Language Models (LLMs) and advanced Natural Language Processing (NLP) techniques. This project offers the following features:  
+**ParvizMind** is an intelligent chatbot developed using Large Language Models (LLMs) and advanced Natural Language Processing (NLP) techniques. This project offers the following features:  
 - **Smart Responses**: Accurate and context-aware answers based on user queries and uploaded documents.  
 - **Document Management**: Supports PDF and TXT files for information extraction and document-based responses.  
 - **Conversation Summarization**: Automatically generates summaries of conversations for quick review.  
@@ -49,8 +45,8 @@
 ### **Installation and Setup**  
 1. **Clone the Repository**:  
    ```bash
-   git clone https://github.com/your-username/ParvizGPT-Pro.git
-   cd ParvizGPT-Pro
+   git clone https://github.com/your-username/ParvizMind.git
+   cd ParvizMind
    ```
 
 2. **Install Required Libraries**:  
@@ -78,7 +74,7 @@
 
 ## **📂 Project Structure**  
 ```
-ParvizGPT-Pro/
+ParvizMind/
 ├── app.py                # Main project file
 ├── requirements.txt      # List of required libraries
 ├── chat_history.db       # SQLite database for storing chat history
@@ -89,24 +85,10 @@ ParvizGPT-Pro/
 
 ---
 
-## **📜 List of Required Libraries**  
-- `langchain-groq`  
-- `langchain-huggingface`  
-- `langchain-community`  
-- `langchain-core`  
-- `langchain-text-splitters`  
-- `gradio`  
-- `pypdf`  
-- `sqlite3`  
-- `re`  
-- `os`  
-- `datetime`  
-
----
-
 ## **📞 Contact the Developer**  
-If you have any questions or would like to contribute to the project, please contact me via email:  
-📧 **a.m.parviz02@gmail.com**  
+If you have any questions or would like to contribute to the project, feel free to reach out:  
+📧 **parviz.your-email@example.com**  
+📱 **Telegram**: [@am_parviz](https://t.me/am_parviz)  
 
 ---
 
@@ -115,4 +97,8 @@ This project is licensed under the **MIT License**. For more information, see th
 
 ---
 
-**Thank you for using ParvizMind!** 🚀
+**Thank you for using ParvizMind!** 🚀  
+
+--- 
+
+This version includes your Telegram address and the updated chatbot name. Let me know if you need further adjustments! 😊
