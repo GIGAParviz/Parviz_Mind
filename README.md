@@ -56,6 +56,7 @@
 
 3. **Run the Project**:  
    ```bash
+   cd ParvizMind/chatbot
    python app.py
    ```
 
@@ -73,21 +74,20 @@
 ---
 
 ## **📂 Project Structure**  
-```
-ParvizMind/
-├── app.py                # Main project file
-├── requirements.txt      # List of required libraries
-├── chat_history.db       # SQLite database for storing chat history
-├── new_chroma_db/        # Directory for ChromaDB data storage
-├── README.md             # Project documentation
-└── assets/               # Image files and resources
-```
 
+parviz-mind/
+├── chatbot/              # Directory for chatbot-related files
+│   ├── ai_core.py        # Core AI logic for chatbot responses
+│   ├── app.py            # Main application file for running the chatbot
+│   ├── database.py       # Database handling for chat history and storage
+├── chat_history.db       # SQLite database for storing user interactions
+├── requirements.txt      # List of dependencies required for the project
+├── README.md             # Project documentation and setup instructions
 ---
 
 ## **📞 Contact the Developer**  
 If you have any questions or would like to contribute to the project, feel free to reach out:  
-📧 **parviz.your-email@example.com**  
+📧 **a.m.parviz02@gmail.com**  
 📱 **Telegram**: [@am_parviz](https://t.me/am_parviz)  
 
 ---
