@@ -1,0 +1,9 @@
+gradio
+langchain_groq
+groq
+langchain_huggingface
+langchain-community 
+langchain-core 
+langchain-text-splitters
+chromadb
+pypdf
