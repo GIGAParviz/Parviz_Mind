@@ -8,20 +8,19 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from database import DatabaseManager
 from dotenv import load_dotenv
-
 load_dotenv()
-
-api_key = os.getenv("GROQ_API_KEY")
 
 class AICore:
     def __init__(self):
+        self.models =  ["deepseek-r1-distill-llama-70b", "llama-3.3-70b-versatile", "gemma2-9b-it"]
+        self.default_model = models[0]
         self.embeddings = HuggingFaceEmbeddings(model_name="heydariAI/persian-embeddings")
         self.vector_store = Chroma(embedding_function=self.embeddings)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         self.chat_history = []
         self.price_per_token = 0.00001
-        self.api_key = api_key
-        self.model = ChatGroq(api_key=self.api_key, model_name=default_model)
+        self.api_key = os.getenv("GROQ_API_KEY")
+        self.model = ChatGroq(api_key=self.api_key, model_name=self.default_model)
         self.db = DatabaseManager()
     def _init_model(self, model_name):
         if self.model.model_name != model_name:
