@@ -83,6 +83,7 @@ parviz-mind/
 ├── chat_history.db       # SQLite database for storing user interactions
 ├── requirements.txt      # List of dependencies required for the project
 ├── README.md             # Project documentation and setup instructions
+
 ---
 
 ## **📞 Contact the Developer**  
