@@ -1,7 +1,6 @@
 import gradio as gr
 from ai_core import AICore
 
-
 class ChatInterface:
     def __init__(self, ai_core: AICore):
         self.ai = ai_core
@@ -21,7 +20,7 @@ class ChatInterface:
                     self.summary_output = gr.Textbox(label="📌 خلاصه مکالمه", interactive=False)
             with gr.Accordion("تنظیمات پیشرفته", open=False):
                 with gr.Row():
-                    self.model_dropdown = gr.Dropdown(label="🔍 انتخاب مدل", choices=models, value=default_model)
+                    self.model_dropdown = gr.Dropdown(label="🔍 انتخاب مدل", choices=self.ai.models, value=self.ai.default_model)
                     self.tone_dropdown = gr.Dropdown(label="🎭 لحن پاسخ", choices=["رسمی", "محاوره‌ای", "علمی", "طنزآمیز"], value="رسمی")
                     self.language_dropdown = gr.Dropdown(label="🌐 زبان چت بات", choices=["فارسی", "انگلیسی", "عربی"], value="فارسی")
                     self.token_count = gr.Textbox(label="🔢 تعداد توکن‌ها", interactive=False)
@@ -68,7 +67,7 @@ class ChatInterface:
         self.ai.clear_history()
         return self.ai.chat_history, "", 0, "0 دلار"
     def launch(self):
-        self.interface.launch()
+        self.interface.launch(share=True)
 
 if __name__ == "__main__":
     ai_core = AICore()
