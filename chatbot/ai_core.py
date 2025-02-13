@@ -3,7 +3,7 @@ import re
 from pypdf import PdfReader
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from database import DatabaseManager
@@ -13,7 +13,7 @@ load_dotenv()
 class AICore:
     def __init__(self):
         self.models =  ["deepseek-r1-distill-llama-70b", "llama-3.3-70b-versatile", "gemma2-9b-it"]
-        self.default_model = models[0]
+        self.default_model = self.models[0]
         self.embeddings = HuggingFaceEmbeddings(model_name="heydariAI/persian-embeddings")
         self.vector_store = Chroma(embedding_function=self.embeddings)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
