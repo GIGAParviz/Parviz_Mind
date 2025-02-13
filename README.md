@@ -45,8 +45,8 @@
 ### **Installation and Setup**  
 1. **Clone the Repository**:  
    ```bash
-   git clone https://github.com/your-username/ParvizMind.git
-   cd ParvizMind
+   git clone https://github.com/your-username/Parviz_Mind.git
+   cd Parviz_Mind
    ```
 
 2. **Install Required Libraries**:  
@@ -56,7 +56,7 @@
 
 3. **Run the Project**:  
    ```bash
-   cd ParvizMind/chatbot
+   cd Parviz_Mind/chatbot
    python app.py
    ```
 
