@@ -74,6 +74,7 @@
 ---
 
 ## **📂 Project Structure**  
+```
 
 parviz-mind/
 ├── chatbot/              # Directory for chatbot-related files
@@ -84,7 +85,7 @@ parviz-mind/
 ├── requirements.txt      # List of dependencies required for the project
 ├── README.md             # Project documentation and setup instructions
 
----
+```
 
 ## **📞 Contact the Developer**  
 If you have any questions or would like to contribute to the project, feel free to reach out:  
