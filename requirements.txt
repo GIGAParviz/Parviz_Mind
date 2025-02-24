@@ -1,4 +1,9 @@
-gradio
+Flask
+Flask-Swagger-UI
+pypdf
+langchain
+sqlite3
+uuid
 langchain_groq
 groq
 langchain_huggingface
