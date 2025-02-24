@@ -75,16 +75,22 @@
 
 ## **📂 Project Structure**  
 ```
-
 parviz-mind/
-├── chatbot/              # Directory for chatbot-related files
-│   ├── ai_core.py        # Core AI logic for chatbot responses
-│   ├── app.py            # Main application file for running the chatbot
-│   ├── database.py       # Database handling for chat history and storage
-├── chat_history.db       # SQLite database for storing user interactions
-├── requirements.txt      # List of dependencies required for the project
-├── README.md             # Project documentation and setup instructions
-
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── database.py
+│   ├── ai_core.py
+│   ├── routes.py
+├── static/
+│   └── swagger.json
+├── templates/
+│   └── index.html
+├── uploads/  (ignored in .gitignore)
+├── requirements.txt
+├── .gitignore
+├── README.md
+├── run.py
 ```
 
 ## **📞 Contact the Developer**  
