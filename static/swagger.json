@@ -1,0 +1,444 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Parviz Mind Chatbot API",
+    "description": "API for interacting with Parviz Mind AI Chatbot",
+    "version": "1.0.0"
+  },
+  "host": "100.127.255.249:5000",
+  "schemes": ["http"],
+  "paths": {
+    "/chat": {
+      "post": {
+        "summary": "Chat with AI (Web Interface)",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "description": "User's question"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "required": false,
+            "description": "Upload a PDF or TXT file"
+          },
+          {
+            "name": "summarize",
+            "in": "formData",
+            "type": "boolean",
+            "required": false,
+            "description": "Enable chat summarization"
+          },
+          {
+            "name": "tone",
+            "in": "formData",
+            "type": "string",
+            "enum": ["رسمی", "محاوره‌ای", "علمی", "طنزآمیز"],
+            "required": false,
+            "description": "Tone of response"
+          },
+          {
+            "name": "model",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "deepseek-r1-distill-llama-70b",
+              "llama-3.3-70b-versatile",
+              "gemma2-9b-it",
+              "deepseek-r1-distill-qwen-32b"
+            ],
+            "required": false,
+            "description": "AI Model to use"
+          },
+          {
+            "name": "creativity",
+            "in": "formData",
+            "type": "number",
+            "format": "float",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "required": false,
+            "description": "Creativity level (temperature)"
+          },
+          {
+            "name": "language",
+            "in": "formData",
+            "type": "string",
+            "enum": ["فارسی", "انگلیسی"],
+            "required": false,
+            "description": "Response language"
+          },
+          {
+            "name": "main_prompt",
+            "in": "formData",
+            "type": "string",
+            "required": false,
+            "description": "Main Prompt"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "response": { "type": "string" },
+                "summary": { "type": "string" },
+                "total_tokens": { "type": "integer" },
+                "price": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "post": {
+        "summary": "Register a new user",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object that needs to be added",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" }
+              },
+              "required": ["id"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "created_at": { "type": "string", "format": "date-time" }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/api/agents": {
+      "post": {
+        "summary": "Create a new agent",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Agent object to create",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "creator_id": { "type": "string" },
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "llm_model": { "type": "string" },
+                "instruction_prompt": { "type": "string" },
+                "response_style": { "type": "string" },
+                "creativity": { "type": "number", "format": "float" },
+                "response_length": { "type": "string" },
+                "welcome_message": { "type": "string" },
+                "language": { "type": "string" },
+                "restricted_words": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "resources": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "required": ["id", "creator_id", "name", "llm_model", "instruction_prompt"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Agent created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "creator_id": { "type": "string" },
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "llm_model": { "type": "string" },
+                "instruction_prompt": { "type": "string" },
+                "response_style": { "type": "string" },
+                "creativity": { "type": "number", "format": "float" },
+                "response_length": { "type": "string" },
+                "welcome_message": { "type": "string" },
+                "language": { "type": "string" },
+                "restricted_words": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "resources": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "created_at": { "type": "string", "format": "date-time" },
+                "updated_at": { "type": "string", "format": "date-time" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/api/agents/{agent_id}": {
+      "put": {
+        "summary": "Update an existing agent",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID of the agent to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Agent object with updated data",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent updated successfully",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Agent not found or update error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get an agent by ID",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID of the agent to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent retrieved successfully",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Agent not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an agent by ID",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID of the agent to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Agent deleted successfully"
+          },
+          "404": {
+            "description": "Agent not found"
+          }
+        }
+      }
+    },
+    "/api/users/{user_id}/conversations": {
+      "get": {
+        "summary": "List conversations for a user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "User ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "default": 1,
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "default": 20,
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversations retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                },
+                "total": { "type": "integer" },
+                "page": { "type": "integer" },
+                "limit": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{conversation_id}/messages": {
+      "get": {
+        "summary": "List messages for a conversation",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Conversation ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "default": 1,
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "default": 50,
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                },
+                "total": { "type": "integer" },
+                "page": { "type": "integer" },
+                "limit": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat": {
+      "post": {
+        "summary": "Chat interaction via API",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Chat request object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": { "type": "string" },
+                "message": { "type": "string" },
+                "file_ids": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "conversation_id": { "type": "string" },
+                "model_name": { "type": "string" },
+                "agent_id": { "type": "string" },
+                "tone": { "type": "string" },
+                "creativity": { "type": "number", "format": "float" },
+                "keywords": { "type": "string" },
+                "language": { "type": "string" },
+                "response_length": { "type": "string" },
+                "welcome_message": { "type": "string" },
+                "exclusion_words": { "type": "string" },
+                "main_prompt": { "type": "string" },
+                "title": { "type": "string" }
+              },
+              "required": ["user_id", "message"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful chat response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "conversation_id": { "type": "string" },
+                "message_id": { "type": "string" },
+                "response": { "type": "string" },
+                "token_usage": {
+                  "type": "object",
+                  "properties": {
+                    "prompt_tokens": { "type": "integer" },
+                    "completion_tokens": { "type": "integer" },
+                    "total_tokens": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    }
+  }
+}
