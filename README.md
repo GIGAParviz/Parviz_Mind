@@ -57,7 +57,7 @@
 3. **Run the Project**:  
    ```bash
    cd Parviz_Mind/chatbot
-   python app.py
+   python run.py
    ```
 
 4. **Access the User Interface**:  
