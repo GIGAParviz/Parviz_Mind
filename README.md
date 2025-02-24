@@ -76,12 +76,10 @@
 ## **📂 Project Structure**  
 ```
 parviz-mind/
-├── app/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── database.py
-│   ├── ai_core.py
-│   ├── routes.py
+├── config.py
+├── database.py
+├── ai_core.py
+├── app.py
 ├── static/
 │   └── swagger.json
 ├── templates/
@@ -90,7 +88,6 @@ parviz-mind/
 ├── requirements.txt
 ├── .gitignore
 ├── README.md
-├── run.py
 ```
 
 ## **📞 Contact the Developer**  
