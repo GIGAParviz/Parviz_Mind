@@ -24,7 +24,6 @@ class AICore:
 
     def _init_model(self, model_name):
         if self.model.model_name != model_name:
-            from langchain_groq import ChatGroq
             self.model = ChatGroq(api_key=self.api_key, model_name=model_name)
 
     def summarize_chat(self):
@@ -83,18 +82,22 @@ class AICore:
         retrieved_docs = self.vector_store.similarity_search(search_query, k=3)
         knowledge = "\n\n".join(doc.page_content for doc in retrieved_docs)
         tone_prompts = {
-            "رسمی": "پاسخ را با لحنی رسمی و مودبانه ارائه کن.",
-            "محاوره‌ای": "پاسخ را به صورت دوستانه ارائه کن.",
-            "علمی": "پاسخ را با استدلال‌های منطقی ارائه کن.",
-            "طنزآمیز": "پاسخ را با لحنی طنزآمیز ارائه کن.",
+            "رسمی": "Please provide a formal and polite response." if language == "English" else "پاسخ را با لحنی رسمی و مودبانه ارائه کن.",
+            "محاوره‌ای": "Please provide a friendly response." if language == "English" else "پاسخ را به صورت دوستانه ارائه کن.",
+            "علمی": "Please provide a logical, scientific response." if language == "English" else "پاسخ را با استدلال‌های منطقی ارائه کن.",
+            "طنزآمیز": "Please provide a humorous response." if language == "English" else "پاسخ را با لحنی طنزآمیز ارائه کن.",
         }
-        tone_instruction = tone_prompts.get(tone, f"پاسخ را به زبان {language} ارائه کن.")
-        language_instruction = (f"پاسخ را فقط به زبان {language} ارائه کن و از زبان دیگری استفاده نکن مگر آنکه بخواهی کد بنویسی "
-                                f"که در آن صورت فقط از زبان انگلیسی استفاده کن مگر اینکه کاربر از تو درخواست کند از زبان دیگری استفاده بکنی و از زبان چینی استفاده نکن.") if language else ""
+        tone_instruction = tone_prompts.get(tone, f"Please respond in {language}." if language == "English" else f"پاسخ را به زبان {language} ارائه کن.")
+        
+        if language == "English":
+            language_instruction = "Please respond in English only, unless specifically asked to use another language for code examples."
+        else:
+            language_instruction = f"پاسخ را فقط به زبان {language} ارائه کن و از زبان دیگری استفاده نکن مگر آنکه بخواهی کد بنویسی."
+
         if response_length == "کوتاه":
-            length_instruction = "پاسخ را به صورت مختصر ارائه کن."
+            length_instruction = "Please provide a brief response." if language == "English" else "پاسخ را به صورت مختصر ارائه کن."
         elif response_length == "بلند":
-            length_instruction = "پاسخ را به صورت مفصل و جامع ارائه کن."
+            length_instruction = "Please provide a detailed and comprehensive response." if language == "English" else "پاسخ را به صورت مفصل و جامع ارائه کن."
         else:
             length_instruction = ""
         exclusion_instruction = f"از کلمات زیر در پاسخ استفاده نکن: {exclusion_words}" if exclusion_words else ""
@@ -113,7 +116,7 @@ class AICore:
         cleaned_response = self.remove_think_sections(response.content)
         if language == 'فارسی':
             cleaned_response = self.filter_to_persian(cleaned_response)
-            self.chat_history.append((query, cleaned_response))
+        self.chat_history.append((query, cleaned_response))
         total_tokens, price = self.calculate_price(prompt, cleaned_response)
 
         full_history = "\n".join([f"پرسش: {q}\nپاسخ: {a}" for q, a in self.chat_history])
