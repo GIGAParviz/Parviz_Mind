@@ -1,0 +1,880 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Parviz Mind API",
+    "description": "API for Parviz Mind AI chatbot with human agent support",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/chat": {
+      "post": {
+        "summary": "Process a chat request",
+        "description": "Send a query to the AI and get a response",
+        "tags": ["Chat"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/ChatResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{user_id}/conversations": {
+      "get": {
+        "summary": "List conversations for a user",
+        "description": "Get a list of conversations for the specified user",
+        "tags": ["Chat"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "conversations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ConversationResponse"
+                  }
+                },
+                "page": {"type": "integer"},
+                "limit": {"type": "integer"},
+                "total": {"type": "integer"}
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{conversation_id}/messages": {
+      "get": {
+        "summary": "List messages in a conversation",
+        "description": "Get a list of messages for the specified conversation",
+        "tags": ["Chat"],
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Conversation ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 50,
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messages": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/MessageResponse"
+                  }
+                },
+                "page": {"type": "integer"},
+                "limit": {"type": "integer"},
+                "total": {"type": "integer"}
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/agents": {
+      "post": {
+        "summary": "Create a new agent",
+        "description": "Register a new human agent",
+        "tags": ["Agents"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AgentCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Agent created successfully",
+            "schema": {
+              "$ref": "#/definitions/AgentResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/agents/{agent_id}": {
+      "get": {
+        "summary": "Get agent details",
+        "description": "Get detailed information about an agent",
+        "tags": ["Agents"],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/AgentResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an agent",
+        "description": "Update an existing agent's information",
+        "tags": ["Agents"],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AgentUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent updated successfully",
+            "schema": {
+              "$ref": "#/definitions/AgentResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an agent",
+        "description": "Delete an existing agent",
+        "tags": ["Agents"],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {"type": "boolean"},
+                "message": {"type": "string"}
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/agents/{agent_id}/status": {
+      "put": {
+        "summary": "Update agent status",
+        "description": "Update an agent's availability status",
+        "tags": ["Agents"],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Agent ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["available", "busy", "offline"],
+                  "description": "Agent status"
+                }
+              },
+              "required": ["status"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status updated successfully",
+            "schema": {
+              "$ref": "#/definitions/AgentResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/files": {
+      "post": {
+        "summary": "Upload a file",
+        "description": "Upload a file to the storage service",
+        "tags": ["Files"],
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "File to upload"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "File uploaded successfully",
+            "schema": {
+              "$ref": "#/definitions/FileInfo"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List files",
+        "description": "Get a list of available files",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "File prefix to filter by"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/FileInfo"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/files/{file_id}": {
+      "get": {
+        "summary": "Download a file",
+        "description": "Download a specific file by ID",
+        "tags": ["Files"],
+        "produces": ["application/octet-stream"],
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "File ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File content",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a file",
+        "description": "Delete a specific file by ID",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "File ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {"type": "boolean"},
+                "message": {"type": "string"}
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/files/{file_id}/info": {
+      "get": {
+        "summary": "Get file information",
+        "description": "Get metadata about a specific file",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "File ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/FileInfo"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        }
+      }
+    },
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Success flag"
+        },
+        "message": {
+          "type": "string",
+          "description": "Success message"
+        }
+      }
+    },
+    "ChatRequest": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "User ID"
+        },
+        "query": {
+          "type": "string",
+          "description": "User query text"
+        },
+        "model_name": {
+          "type": "string",
+          "description": "AI model to use",
+          "default": "groq-llama3"
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["formal", "conversational", "scientific", "humorous"],
+          "description": "Tone of response",
+          "default": "conversational"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "fa"],
+          "description": "Response language",
+          "default": "en"
+        },
+        "response_length": {
+          "type": "string",
+          "enum": ["short", "medium", "long"],
+          "description": "Desired response length",
+          "default": "medium"
+        },
+        "summarize": {
+          "type": "boolean",
+          "description": "Whether to summarize the conversation",
+          "default": false
+        },
+        "creativity": {
+          "type": "number",
+          "format": "float",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Creativity level",
+          "default": 0.7
+        },
+        "welcome_message": {
+          "type": "boolean",
+          "description": "Whether this is a welcome message",
+          "default": false
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Keywords to include in response"
+        },
+        "exclusion_words": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Words to exclude from response"
+        },
+        "main_prompt": {
+          "type": "string",
+          "description": "Custom system prompt"
+        },
+        "chatbot_name": {
+          "type": "string",
+          "description": "Name of the chatbot",
+          "default": "Parviz"
+        }
+      },
+      "required": ["user_id", "query"]
+    },
+    "ChatResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string",
+          "description": "AI response text"
+        },
+        "conversation_id": {
+          "type": "string",
+          "description": "Conversation ID"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model used for response"
+        },
+        "tokens": {
+          "type": "integer",
+          "description": "Number of tokens in response"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "description": "Price of the response"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Conversation summary"
+        }
+      }
+    },
+    "MessageResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Message ID"
+        },
+        "conversation_id": {
+          "type": "string",
+          "description": "Conversation ID"
+        },
+        "role": {
+          "type": "string",
+          "description": "Message role (user or assistant)"
+        },
+        "content": {
+          "type": "string",
+          "description": "Message content"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Message timestamp"
+        }
+      }
+    },
+    "ConversationResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Conversation ID"
+        },
+        "user_id": {
+          "type": "string",
+          "description": "User ID"
+        },
+        "title": {
+          "type": "string",
+          "description": "Conversation title"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model used for conversation"
+        },
+        "language": {
+          "type": "string",
+          "description": "Conversation language"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      }
+    },
+    "AgentCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Agent name"
+        },
+        "level": {
+          "type": "string",
+          "enum": ["junior", "intermediate", "senior", "expert"],
+          "description": "Agent expertise level"
+        },
+        "hourly_rate": {
+          "type": "number",
+          "format": "float",
+          "description": "Hourly rate in dollars"
+        },
+        "specialties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Agent specialties"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Languages spoken by agent"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["available", "busy", "offline"],
+          "description": "Initial agent status",
+          "default": "offline"
+        }
+      },
+      "required": ["name", "level", "hourly_rate"]
+    },
+    "AgentUpdate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Agent name"
+        },
+        "level": {
+          "type": "string",
+          "enum": ["junior", "intermediate", "senior", "expert"],
+          "description": "Agent expertise level"
+        },
+        "hourly_rate": {
+          "type": "number",
+          "format": "float",
+          "description": "Hourly rate in dollars"
+        },
+        "specialties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Agent specialties"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Languages spoken by agent"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["available", "busy", "offline"],
+          "description": "Agent status"
+        }
+      }
+    },
+    "AgentResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Agent ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Agent name"
+        },
+        "level": {
+          "type": "string",
+          "description": "Agent expertise level"
+        },
+        "hourly_rate": {
+          "type": "number",
+          "format": "float",
+          "description": "Hourly rate in dollars"
+        },
+        "specialties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Agent specialties"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Languages spoken by agent"
+        },
+        "status": {
+          "type": "string",
+          "description": "Agent status"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        },
+        "rating": {
+          "type": "number",
+          "format": "float",
+          "description": "Average rating"
+        }
+      }
+    },
+    "FileInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "File ID"
+        },
+        "original_filename": {
+          "type": "string",
+          "description": "Original filename"
+        },
+        "content_type": {
+          "type": "string",
+          "description": "File MIME type"
+        },
+        "size": {
+          "type": "integer",
+          "description": "File size in bytes"
+        },
+        "last_modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last modified timestamp"
+        },
+        "etag": {
+          "type": "string",
+          "description": "File ETag"
+        }
+      }
+    }
+  }
+} 
